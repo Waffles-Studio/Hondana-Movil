@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -64,4 +65,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.1.0')
+    implementation 'com.google.firebase:firebase-analytics'
+
+    //Auth Firebase-Google
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
 }

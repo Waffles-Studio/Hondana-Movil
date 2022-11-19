@@ -1,5 +1,6 @@
 package com.example.mylogin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +18,11 @@ import com.example.mylogin.database.UserDao;
 import com.example.mylogin.model.HondanaUser;
 import com.example.mylogin.repository.UserRepository;
 import com.example.mylogin.viewmodel.ListaUsersViewModel;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -35,18 +41,56 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+/*
+        txtUser = (EditText) findViewById(R.id.editUsername);
+        txtPass = (EditText) findViewById(R.id.editPassword);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnRegister = (Button) findViewById(R.id.btnGoRegister);
+
+ */
+/*
+        db=AppDatabase.getInstance(this.getApplicationContext());
+        UserDao userDao=db.userDao();
+        UserRepository userRepository=new UserRepository(userDao);
+        */
+
+
 
         txtUser = (EditText) findViewById(R.id.editUsername);
         txtPass = (EditText) findViewById(R.id.editPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnGoRegister);
 
-        db=AppDatabase.getInstance(this.getApplicationContext());
-        UserDao userDao=db.userDao();
-        UserRepository userRepository=new UserRepository(userDao);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (txtUser.length() == 0 || txtPass.length() == 0){
+                    Toast.makeText(LoginActivity.this, "Please Fill All the Fields.", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    d1 = txtUser.getText().toString();
+                    d2 = txtPass.getText().toString();
+
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(d1, d2).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                                loginIntent.putExtra("Username", d1);
+                                LoginActivity.this.startActivity(loginIntent);
 
 
+                            }else {
+                                Toast.makeText(LoginActivity.this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
 
+
+/*
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+ */
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,4 +127,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }
