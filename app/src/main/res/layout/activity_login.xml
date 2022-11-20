@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/ContainerL"
+    android:background="@color/fui_transparent"
     tools:context=".LoginActivity">
 
   <TextView
@@ -39,7 +41,8 @@
       android:layout_marginEnd="32dp"
       android:layout_marginBottom="8dp"
       android:ems="10"
-      android:hint="Username"
+      android:hint="Email"
+      android:importantForAutofill="yes"
       android:inputType="textPersonName"
       android:minHeight="48dp"
       app:layout_constraintBottom_toTopOf="@+id/editPassword"
@@ -56,6 +59,8 @@
       android:layout_marginBottom="32dp"
       android:ems="10"
       android:hint="Password"
+      android:autofillHints="password"
+      android:importantForAutofill="yes"
       android:inputType="textPassword"
       android:minHeight="48dp"
       app:layout_constraintBottom_toTopOf="@+id/btnLogin"
@@ -77,6 +82,34 @@
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+  <Button
+      android:id="@+id/btnLoginGoogle"
+      android:layout_width="0dp"
+      android:layout_height="54dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginEnd="32dp"
+      android:layout_marginTop="10dp"
+      android:text="Start with Google"
+      android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btnLogin"/>
+
+
+
+  <TextView
+      android:id="@+id/txtForgot"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:text="Forgot Password?"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btnLoginGoogle" />
 
   <Button
       android:id="@+id/btnGoRegister"
@@ -92,16 +125,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/txtForgot" />
 
-  <TextView
-      android:id="@+id/txtForgot"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:text="Forgot Password?"
-      android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

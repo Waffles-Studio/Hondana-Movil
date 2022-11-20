@@ -1,37 +1,63 @@
 package com.example.mylogin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btnNext;
     private TextView btnRegister, mensaje;
     public static final String EXTRA_MESSAGE = "com.example.mylogin.MESSAGE";
+    private FirebaseAuth mAuth;
+    String usr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Se declaran y relacionan elementos
+        mAuth = FirebaseAuth.getInstance();
+
+
+
         btnNext = (Button) findViewById(R.id.btnNext);
         btnRegister = (TextView) findViewById(R.id.textView6);
         mensaje = (TextView) findViewById(R.id.txtMsg);
 
-        //Comprobar Si se tiene coneccion a internet
         if(isNetDisponible()){
             if(isOnlineNet()){
                 mensaje.setText("");
+                if(mAuth.getCurrentUser() != null){
+                    usr = mAuth.getCurrentUser().getEmail();
+
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    if(currentUser != null){
+                        Intent loginIntent = new Intent(MainActivity.this, HomeActivity.class);
+                        loginIntent.putExtra("Username", usr);
+                        MainActivity.this.startActivity(loginIntent);
+                    }
+                }
+
             }
             else{
                 Toast.makeText(MainActivity.this, "Sin conexión", Toast.LENGTH_SHORT).show();
@@ -42,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Wifi o Red Móvil apagada", Toast.LENGTH_SHORT).show();
             mensaje.setText("¡La red está deshabilitada, actívela para poder usar esta aplicación!");
         }
+
+        String strmsg = getIntent().getStringExtra("msg");
+        if (strmsg != null){
+            Toast.makeText(MainActivity.this, strmsg, Toast.LENGTH_SHORT).show();
+        }
+
 
 
         //Clic Boton de Iniciar Sesion
@@ -71,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Funcion para comprobar si tiene coneccion a internet
-    public Boolean isOnlineNet() {
+    public boolean isOnlineNet() {
         try {
             Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
 
@@ -85,4 +117,14 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    protected void onStart(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null){
+
+        }
+        super.onStart();
+    }
+
 }
