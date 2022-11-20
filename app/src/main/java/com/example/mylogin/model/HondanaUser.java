@@ -2,6 +2,7 @@ package com.example.mylogin.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
@@ -26,6 +27,7 @@ public class HondanaUser implements Serializable{
     @ColumnInfo (name = "password")
     private String password;
 
+    @Ignore
     public HondanaUser() { }
 
     public HondanaUser(int userID, @NonNull String userName, @NonNull String email, @NonNull String password) {

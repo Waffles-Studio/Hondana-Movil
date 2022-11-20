@@ -77,9 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                     }
 
-
-
-
                 }
                 else{Toast.makeText(RegisterActivity.this, "Rellene todo los campos!!", Toast.LENGTH_SHORT).show();}
             }
