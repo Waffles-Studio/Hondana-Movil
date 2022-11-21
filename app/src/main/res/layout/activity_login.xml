@@ -39,7 +39,6 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="32dp"
       android:layout_marginEnd="32dp"
-      android:layout_marginBottom="8dp"
       android:ems="10"
       android:hint="Email"
       android:importantForAutofill="yes"
@@ -77,27 +76,37 @@
       android:text="Start Reading"
       android:textAppearance="@style/TextAppearance.AppCompat.Body1"
       android:textStyle="bold"
+      app:cornerRadius="24dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+
   <Button
       android:id="@+id/btnLoginGoogle"
       android:layout_width="0dp"
       android:layout_height="54dp"
       android:layout_marginStart="32dp"
-      android:layout_marginEnd="32dp"
       android:layout_marginTop="10dp"
+      android:layout_marginEnd="32dp"
       android:text="Start with Google"
       android:textAppearance="@style/TextAppearance.AppCompat.Body1"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btnLogin"/>
+      app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
 
+  <com.google.android.gms.common.SignInButton
+      android:id="@+id/sign_in_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="72dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
   <TextView
       android:id="@+id/txtForgot"
@@ -109,7 +118,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btnLoginGoogle" />
+      app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
 
   <Button
       android:id="@+id/btnGoRegister"
@@ -120,7 +129,7 @@
       android:background="@android:color/transparent"
       android:text="Don't have an account? Sign up"
       android:textAllCaps="false"
-      android:textColor="#FF6D0A"
+      android:textColor="#BF3636"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/txtForgot" />

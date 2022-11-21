@@ -40,6 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,14 +68,13 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private String TAG = "GoogleSignIn";
+    private SignInButton SInButton;
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private GoogleSignInClient mGoogleSignClient;
     private String d1, d2;
 
-
-    
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,9 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle = (Button) findViewById(R.id.btnLoginGoogle);
         cl = (ConstraintLayout) findViewById(R.id.ContainerL);
 
+        // Set the dimensions of the sign-in button.
+        SInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        SInButton.setSize(SignInButton.SIZE_STANDARD);
 
         mAuth = FirebaseAuth.getInstance();
 
