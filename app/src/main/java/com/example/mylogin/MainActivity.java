@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView btnRegister, mensaje;
     public static final String EXTRA_MESSAGE = "com.example.mylogin.MESSAGE";
     private FirebaseAuth mAuth;
+    private FirebaseAnalytics mFirebaseAnalytics;
     String usr = "";
 
     @Override
@@ -37,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.METHOD, "Main");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params);
 
 
 

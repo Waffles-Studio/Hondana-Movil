@@ -45,12 +45,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -62,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView btnForgot;
     private ProgressBar progressBar;
     private ConstraintLayout cl;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private String TAG = "GoogleSignIn";
 
@@ -89,6 +92,16 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.METHOD, "Login");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params);
+
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "View Login");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         //Configurar Google SignIn
         GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -113,6 +126,12 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
+                                mFirebaseAnalytics = FirebaseAnalytics.getInstance(LoginActivity.this);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "LoginEmail");
+                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
+
+
                                 Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
                                 loginIntent.putExtra("Username", d1);
                                 LoginActivity.this.startActivity(loginIntent);
@@ -147,6 +166,12 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
+                                mFirebaseAnalytics = FirebaseAnalytics.getInstance(LoginActivity.this);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "ResetPasswor");
+                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+
                                 Toast.makeText(LoginActivity.this, "Correo enviado correctamente", Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.INVISIBLE);
                             }
@@ -207,6 +232,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                     FirebaseUser currentUser = mAuth.getCurrentUser();
                                     if(currentUser != null){
+                                        mFirebaseAnalytics = FirebaseAnalytics.getInstance(LoginActivity.this);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterGoogle");
+                                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
+
+
                                         String usr = mAuth.getCurrentUser().getEmail();
                                         Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
                                         loginIntent.putExtra("Username", usr);

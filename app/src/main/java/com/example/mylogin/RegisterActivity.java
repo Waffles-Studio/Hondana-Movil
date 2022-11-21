@@ -19,6 +19,7 @@ import com.example.mylogin.model.HondanaUser;
 import com.example.mylogin.repository.UserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,6 +28,7 @@ import org.w3c.dom.Text;
 public class RegisterActivity extends AppCompatActivity {
     private EditText editEmail, editUsername2, editPasswordc1, editPasswordc2;
     private Button btnAddUser;
+    private FirebaseAnalytics mFirebaseAnalytics;
     //private AppDatabase db;
 
     private String p1, p2, e1;
@@ -42,6 +44,12 @@ public class RegisterActivity extends AppCompatActivity {
         editUsername2=(EditText)findViewById(R.id.editUsername2);
         editPasswordc1=(EditText)findViewById(R.id.editPasswordc1);
         editPasswordc2=(EditText)findViewById(R.id.editPasswordc2);
+
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.METHOD, "REGISTER");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params);
 
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +71,11 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
+                                    mFirebaseAnalytics = FirebaseAnalytics.getInstance(RegisterActivity.this);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterEmail");
+                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
+
                                     Intent RegisterIntent = new Intent(RegisterActivity.this, MainActivity.class);
                                     RegisterIntent.putExtra("msg", "Usuario registrado correctamente");
                                     RegisterActivity.this.startActivity(RegisterIntent);
