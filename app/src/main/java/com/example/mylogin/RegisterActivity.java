@@ -77,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
                                     Intent RegisterIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                    RegisterIntent.putExtra("msg", "Usuario registrado correctamente");
+                                    RegisterIntent.putExtra("msg", "User Successfully Registered.");
                                     RegisterActivity.this.startActivity(RegisterIntent);
                                 }
                                 else {
@@ -89,12 +89,12 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Passwords do not Match.", Toast.LENGTH_SHORT).show();
                     }
 
                 }
                 else{
-                    Toast.makeText(RegisterActivity.this, "Rellene todo los campos!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Please Fill All the Fields.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
