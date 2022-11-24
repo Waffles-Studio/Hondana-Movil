@@ -40,6 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,13 +59,14 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText txtUser, txtPass;
-    private Button btnLogin, btnRegister, btnGoogle;
+    private Button btnLogin, btnRegister;
     public static final String EXTRA_MESSAGE = "com.example.mylogin.MESSAGE";
     private AppDatabase db;
     private TextView btnForgot;
     private ProgressBar progressBar;
     private ConstraintLayout cl;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private SignInButton btnGoogle;
 
     private String TAG = "GoogleSignIn";
 
@@ -86,7 +88,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnGoRegister);
         btnForgot = (TextView) findViewById(R.id.txtForgot);
-        btnGoogle = (Button) findViewById(R.id.btnLoginGoogle);
+        btnGoogle = (SignInButton) findViewById(R.id.sign_in_button);
+        btnGoogle.setSize(SignInButton.SIZE_STANDARD);
         cl = (ConstraintLayout) findViewById(R.id.ContainerL);
 
 
