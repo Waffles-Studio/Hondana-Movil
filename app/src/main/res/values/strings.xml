@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Hondana</string>
-    <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Search</string>
-    <string name="title_notifications">Recents</string>
-</resources>
