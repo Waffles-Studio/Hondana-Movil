@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     Bundle bundle = new Bundle();
                                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterEmail");
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
-                                    InsertUser(n1,e1,p1);
+                                    InsertUser(n1,e1);
 
                                     Intent RegisterIntent = new Intent(RegisterActivity.this, MainActivity.class);
                                     RegisterIntent.putExtra("msg", "Usuario registrado correctamente");
@@ -118,15 +118,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void InsertUser(String Nombre,String UserPassword,String Email)
+    private void InsertUser(String Nombre,String Email)
     {
        Map<String, Object> User = new HashMap<>();
        User.put("Activo",1 );
        User.put("UserEmail", Email);
-       User.put("UserID", "Ninguno");
-       User.put("UserIcon", "Ninguno");
        User.put("UserName", Nombre);
-       User.put("UserPassword", UserPassword);
+
 
     //mFirestore.collection("HondanaDB").document("Users")
     //        .set(User)
