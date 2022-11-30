@@ -18,25 +18,35 @@ import com.example.mylogin.database.UserDao;
 import com.example.mylogin.model.HondanaUser;
 import com.example.mylogin.repository.UserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText editEmail, editUsername2, editPasswordc1, editPasswordc2;
     private Button btnAddUser;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseFirestore mFirestore;
     //private AppDatabase db;
 
-    private String p1, p2, e1;
+    private String p1, p2, e1,n1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+
 
         //RELACIONAR ELEMENTOS Y CREARLOS
         btnAddUser=(Button) findViewById(R.id.btnAddUser);
@@ -50,10 +60,13 @@ public class RegisterActivity extends AppCompatActivity {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.METHOD, "REGISTER");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params);
+        //CONECTAR CON FIRESTORE
+        mFirestore = FirebaseFirestore.getInstance();
 
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                n1 = editUsername2.getText().toString();
                 e1 = editEmail.getText().toString();
                 p1 = editPasswordc1.getText().toString();
                 p2 = editPasswordc2.getText().toString();
@@ -75,10 +88,13 @@ public class RegisterActivity extends AppCompatActivity {
                                     Bundle bundle = new Bundle();
                                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterEmail");
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
+                                    InsertUser(n1,e1,p1);
 
                                     Intent RegisterIntent = new Intent(RegisterActivity.this, MainActivity.class);
                                     RegisterIntent.putExtra("msg", "Usuario registrado correctamente");
+
                                     RegisterActivity.this.startActivity(RegisterIntent);
+
                                 }
                                 else {
                                     String mensaje = task.getException().getMessage().toString();
@@ -98,5 +114,50 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+    }
+
+    private void InsertUser(String Nombre,String UserPassword,String Email)
+    {
+       Map<String, Object> User = new HashMap<>();
+       User.put("Activo",1 );
+       User.put("UserEmail", Email);
+       User.put("UserID", "Ninguno");
+       User.put("UserIcon", "Ninguno");
+       User.put("UserName", Nombre);
+       User.put("UserPassword", UserPassword);
+
+    //mFirestore.collection("HondanaDB").document("Users")
+    //        .set(User)
+    //        .addOnSuccessListener(new OnSuccessListener<Void>() {
+    //            @Override
+    //            public void onSuccess(Void aVoid) {
+    //                //Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+    //            }
+    //        })
+    //        .addOnFailureListener(new OnFailureListener() {
+    //            @Override
+    //            public void onFailure(@NonNull Exception e) {
+    //              //  Toast.makeText(getApplicationContext(),"No Creado Correctamente",Toast.LENGTH_SHORT).show();
+    //            }
+    //        });
+
+
+       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+           @Override
+           public void onSuccess(DocumentReference documentReference) {
+           Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+           finish();
+
+           }
+       }).addOnFailureListener(new OnFailureListener() {
+           @Override
+           public void onFailure(@NonNull Exception e) {
+               Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+           }
+       });
+
+
     }
 }

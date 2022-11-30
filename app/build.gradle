@@ -32,6 +32,17 @@ android {
 }
 
 dependencies {
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+
+    // Declare the dependency for the Cloud Firestore library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-firestore'
+
+    implementation 'com.google.firebase:firebase-firestore:24.1.0'
+
+
     def room_version ="2.4.2"
     def lifecycle_version = "2.4.0"
 
