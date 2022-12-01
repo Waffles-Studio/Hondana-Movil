@@ -43,6 +43,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -52,9 +53,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -71,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     private String TAG = "GoogleSignIn";
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
     private GoogleSignInClient mGoogleSignClient;
     private String d1, d2;
@@ -128,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(d1, d2).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(LoginActivity.this);
                                 Bundle bundle = new Bundle();
                                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "LoginEmail");
@@ -240,6 +245,7 @@ public class LoginActivity extends AppCompatActivity {
                                         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterGoogle");
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
+                                        InsertUser(account.getGivenName().toString(), account.getEmail().toString());
 
                                         String usr = mAuth.getCurrentUser().getEmail();
                                         Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -259,5 +265,60 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void InsertUser(String Nombre,String Email)
+    {
+        Map<String, Object> User = new HashMap<>();
+        User.put("Activo",1 );
+        User.put("UserEmail", Email);
+        User.put("UserName", Nombre);
+
+        //mFirestore.collection("HondanaDB").document("Users")
+        //        .set(User)
+        //        .addOnSuccessListener(new OnSuccessListener<Void>() {
+        //            @Override
+        //            public void onSuccess(Void aVoid) {
+        //                //Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+        //            }
+        //        })
+        //        .addOnFailureListener(new OnFailureListener() {
+        //            @Override
+        //            public void onFailure(@NonNull Exception e) {
+        //              //  Toast.makeText(getApplicationContext(),"No Creado Correctamente",Toast.LENGTH_SHORT).show();
+        //            }
+        //        });
+
+
+/*       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+           @Override
+           public void onSuccess(DocumentReference documentReference) {
+           Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+           finish();
+
+           }
+       }).addOnFailureListener(new OnFailureListener() {
+           @Override
+           public void onFailure(@NonNull Exception e) {
+               Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+           }
+       });*/
+
+        mFirestore.collection("HondanaDB").document(Email)
+                .set(User)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.mylogin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -88,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     Bundle bundle = new Bundle();
                                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterEmail");
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
-                                    InsertUser(n1,e1,p1);
+                                    InsertUser(n1,e1);
 
                                     Intent RegisterIntent = new Intent(RegisterActivity.this, MainActivity.class);
                                     RegisterIntent.putExtra("msg", "Usuario registrado correctamente");
@@ -118,15 +119,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void InsertUser(String Nombre,String UserPassword,String Email)
+    private void InsertUser(String Nombre,String Email)
     {
        Map<String, Object> User = new HashMap<>();
        User.put("Activo",1 );
        User.put("UserEmail", Email);
-       User.put("UserID", "Ninguno");
-       User.put("UserIcon", "Ninguno");
        User.put("UserName", Nombre);
-       User.put("UserPassword", UserPassword);
 
     //mFirestore.collection("HondanaDB").document("Users")
     //        .set(User)
@@ -144,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
     //        });
 
 
-       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+/*       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
            @Override
            public void onSuccess(DocumentReference documentReference) {
            Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
@@ -156,7 +154,22 @@ public class RegisterActivity extends AppCompatActivity {
            public void onFailure(@NonNull Exception e) {
                Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
            }
-       });
+       });*/
+
+        mFirestore.collection("HondanaDB").document(Email)
+                .set(User)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
     }
