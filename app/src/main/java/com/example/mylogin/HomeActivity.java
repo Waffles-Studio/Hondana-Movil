@@ -20,6 +20,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -34,6 +38,9 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnCerrar;
     private GoogleSignInClient mGoogleSignClient;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseAuth mAuth;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         txtWelcome = (TextView) findViewById(R.id.txtWelcome);
         btnCerrar = (Button) findViewById(R.id.btnCS);
 
-        txtWelcome.setText("Hello "+getIntent().getStringExtra("Username")+"!");
+        obtenerusuario(getIntent().getStringExtra("Username"));
 
 
         //Configurar Google SignIn
@@ -97,13 +104,29 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
 
+    }
 
-
-
-
-
+    private void obtenerusuario(String correoUsuario){
+        DocumentReference docRef = db.collection("HondanaDB").document(correoUsuario);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        txtWelcome.setText("Hello "+document.get("UserName")+"!");
+                    } else {
+                        Toast.makeText(HomeActivity.this, "No tiene nombre", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "Error al traer nombre", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
+
+
 }

@@ -24,6 +24,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".DemoActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SearchActivity"
             android:exported="false">
             <meta-data
@@ -31,7 +38,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".LegacyActivity"
+            android:name=".DemoActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
