@@ -53,6 +53,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
@@ -244,8 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Bundle bundle = new Bundle();
                                         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterGoogle");
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
-
-                                        InsertUser(account.getGivenName().toString(), account.getEmail().toString());
+                                        VerificarExistencia(account.getGivenName().toString(),account.getEmail().toString());
 
                                         String usr = mAuth.getCurrentUser().getEmail();
                                         Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -289,8 +290,7 @@ public class LoginActivity extends AppCompatActivity {
         //            }
         //        });
 
-
-/*       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        /*       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
            @Override
            public void onSuccess(DocumentReference documentReference) {
            Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
@@ -318,7 +318,29 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
 
+    private void VerificarExistencia(String Nombre,String Email)
+    {
+        DocumentReference docRef = mFirestore.collection("HondanaDB").document(Email);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists())
+                    {
+                    } else
+                    {
+                        InsertUser(Nombre, Email);
+                    }
+                } else
+                {
+                }
+            }
+        });
 
     }
+
+
 }
