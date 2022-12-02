@@ -2,6 +2,9 @@ package com.example.mylogin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +21,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity {
+
+    // RecyclerView References 2022-12-02
+    ArrayList<String> listData;
+    RecyclerView recycler;
+    // RecyclerView References 2022-12-02
 
     private TextView txtWelcome;
     private Button btnCerrar;
@@ -29,6 +39,18 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // RecyclerView References 2022-12-02
+        recycler = (RecyclerView) findViewById(R.id.recyclerID);
+        //recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
+        recycler.setLayoutManager(new GridLayoutManager(this,3));
+        listData = new ArrayList<String>();
+        for (int i=0; i<=50; i++){
+            listData.add("Book #" + i + " ");
+        }
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(listData);
+        recycler.setAdapter(adapter);
+        // RecyclerView References 2022-12-02
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle params = new Bundle();
