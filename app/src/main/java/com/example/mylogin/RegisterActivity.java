@@ -2,6 +2,7 @@ package com.example.mylogin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -125,7 +126,6 @@ public class RegisterActivity extends AppCompatActivity {
        User.put("UserEmail", Email);
        User.put("UserName", Nombre);
 
-
     //mFirestore.collection("HondanaDB").document("Users")
     //        .set(User)
     //        .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -142,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
     //        });
 
 
-       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+/*       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
            @Override
            public void onSuccess(DocumentReference documentReference) {
            Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
@@ -154,7 +154,22 @@ public class RegisterActivity extends AppCompatActivity {
            public void onFailure(@NonNull Exception e) {
                Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
            }
-       });
+       });*/
+
+        mFirestore.collection("HondanaDB").document(Email)
+                .set(User)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
     }

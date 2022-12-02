@@ -53,7 +53,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
@@ -72,10 +71,11 @@ public class LoginActivity extends AppCompatActivity {
     private ConstraintLayout cl;
     private FirebaseAnalytics mFirebaseAnalytics;
     private SignInButton btnGoogle;
-    private FirebaseFirestore mFirestore;
+
     private String TAG = "GoogleSignIn";
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
     private GoogleSignInClient mGoogleSignClient;
     private String d1, d2;
@@ -87,10 +87,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-        //CONECTAR CON LAS COLECCIONES DE FIREBASE
-        mFirestore = FirebaseFirestore.getInstance();
 
         txtUser = (EditText) findViewById(R.id.editUsername);
         txtPass = (EditText) findViewById(R.id.editPassword);
@@ -137,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(d1, d2).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(LoginActivity.this);
                                 Bundle bundle = new Bundle();
                                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "LoginEmail");
@@ -249,13 +245,12 @@ public class LoginActivity extends AppCompatActivity {
                                         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "RegisterGoogle");
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
+                                        InsertUser(account.getGivenName().toString(), account.getEmail().toString());
 
                                         String usr = mAuth.getCurrentUser().getEmail();
                                         Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
                                         loginIntent.putExtra("Username", usr);
                                         LoginActivity.this.startActivity(loginIntent);
-
-                                        InsertUser(account.getGivenName(),account.getEmail());
                                     }
 
                                 }   else{
@@ -271,6 +266,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
     private void InsertUser(String Nombre,String Email)
     {
         Map<String, Object> User = new HashMap<>();
@@ -278,19 +274,50 @@ public class LoginActivity extends AppCompatActivity {
         User.put("UserEmail", Email);
         User.put("UserName", Nombre);
 
-        mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
-                finish();
+        //mFirestore.collection("HondanaDB").document("Users")
+        //        .set(User)
+        //        .addOnSuccessListener(new OnSuccessListener<Void>() {
+        //            @Override
+        //            public void onSuccess(Void aVoid) {
+        //                //Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+        //            }
+        //        })
+        //        .addOnFailureListener(new OnFailureListener() {
+        //            @Override
+        //            public void onFailure(@NonNull Exception e) {
+        //              //  Toast.makeText(getApplicationContext(),"No Creado Correctamente",Toast.LENGTH_SHORT).show();
+        //            }
+        //        });
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
-            }
-        });
+
+/*       mFirestore.collection("HondanaDB").add(User).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+           @Override
+           public void onSuccess(DocumentReference documentReference) {
+           Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+           finish();
+
+           }
+       }).addOnFailureListener(new OnFailureListener() {
+           @Override
+           public void onFailure(@NonNull Exception e) {
+               Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+           }
+       });*/
+
+        mFirestore.collection("HondanaDB").document(Email)
+                .set(User)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(),"Creado Correctamente",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"No ha sido Creado ",Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
     }
