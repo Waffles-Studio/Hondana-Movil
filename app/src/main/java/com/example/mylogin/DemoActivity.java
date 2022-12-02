@@ -32,7 +32,7 @@ public class DemoActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
         mRecycler.setAdapter(mAdapter);
 
-        
+
 
     }
 
