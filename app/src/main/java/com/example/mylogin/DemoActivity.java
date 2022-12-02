@@ -1,6 +1,7 @@
 package com.example.mylogin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mylogin.adapter.bookAdapter;
@@ -24,7 +25,8 @@ public class DemoActivity extends AppCompatActivity {
 
         mFirestore=FirebaseFirestore.getInstance();
         mRecycler=findViewById(R.id.recyclerviewbooks);
-        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        //mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mRecycler.setLayoutManager(new GridLayoutManager(this,2));
         Query query = mFirestore.collection("Books");
 
         FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
