@@ -1,32 +1,71 @@
 package com.example.mylogin.model;
 
 public class Book {
-    String autor;
-    String nombre;
+
+    String IDLibro;
+    String Titulo;
+    String Autor;
+    String ISBN;
+    String Editorial;
+    String NumeroPaginas;
+    String Calificacion;
+    String VinculoLibro;
+    String VinculoImagen;
+    String Sinopsis;
+
+
+
+
+
+
     public Book(){}
 
-    public Book (String autor)
+    public Book (String Autor,String Titulo)
     {
-        this.autor = autor;
-        this.nombre = nombre;
+        this.Autor = Autor;
+        this.Titulo = Titulo;
+
+    }
+
+    public String getIDLibro() {
+        return IDLibro;
+    }
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public String getNumeroPaginas() {
+        return NumeroPaginas;
+    }
+
+    public String getCalificacion() {
+        return Calificacion;
+    }
+
+    public String getVinculoLibro() {
+        return VinculoLibro;
+    }
+
+    public String getVinculoImagen() {
+        return VinculoImagen;
+    }
+
+    public String getEditorial() {
+        return Editorial;
     }
 
 
-    public String getNombre(){
-        return nombre;
+    public String getSinopsis() {
+        return Sinopsis;
     }
 
-    public void setNombre(){
-        this.nombre=nombre;
+    public String getTitulo(){
+        return Titulo;
     }
 
     public String getAutor(){
-        return autor;
+        return Autor;
     }
-
-    public void setAutor(){
-       this.autor=autor;
-    }
-
 
 }

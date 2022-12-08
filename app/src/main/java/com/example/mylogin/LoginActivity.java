@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
 
 
-                                Intent loginIntent = new Intent(LoginActivity.this, DemoActivity.class);
+                                Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
                                 loginIntent.putExtra("Username", d1);
                                 LoginActivity.this.startActivity(loginIntent);
 
@@ -249,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                                         VerificarExistencia(account.getGivenName().toString(),account.getEmail().toString());
 
                                         String usr = mAuth.getCurrentUser().getEmail();
-                                        Intent loginIntent = new Intent(LoginActivity.this, DemoActivity.class);
+                                        Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
                                         loginIntent.putExtra("Username", usr);
                                         LoginActivity.this.startActivity(loginIntent);
                                     }

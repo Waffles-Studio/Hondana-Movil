@@ -17,13 +17,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import io.reactivex.rxjava3.annotations.NonNull;
 
 
-public class bookAdapter extends FirestoreRecyclerAdapter<Book,bookAdapter.ViewHolder> {
+public class bookAdapter extends FirestoreRecyclerAdapter<Book,bookAdapter.ViewHolder>
+implements View.OnClickListener {
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
      */
+    private View.OnClickListener listener;
     public bookAdapter(@androidx.annotation.NonNull FirestoreRecyclerOptions<Book> options) {
         super(options);
     }
@@ -31,25 +33,38 @@ public class bookAdapter extends FirestoreRecyclerAdapter<Book,bookAdapter.ViewH
     @Override
     protected void onBindViewHolder (@NonNull ViewHolder viewHolder, int i , @NonNull Book book)
     {
-    ViewHolder.autor.setText(book.getAutor());
-    ViewHolder.nombre.setText(book.getNombre());
+    ViewHolder.Autor.setText(book.getAutor());
+    ViewHolder.Titulo.setText(book.getTitulo());
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType)
     {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_book_single,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_book_content,parent,false);
+        v.setOnClickListener(this);
         return new ViewHolder(v);
     }
 
+    public void setOnClicListener(View.OnClickListener listener)
+{
+        this.listener=listener;
+    }
+    @Override
+    public void onClick(View view) {
+    if (listener!=null)
+    {
+        listener.onClick(view);
+    }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        static TextView autor;
-        static TextView nombre;
+        static TextView Autor;
+        static TextView Titulo;
         public ViewHolder (@NonNull View itemView){
         super(itemView);
-        nombre = itemView.findViewById(R.id.txtNombre);
-        autor = itemView.findViewById(R.id.txtAutor);
+            Titulo = itemView.findViewById(R.id.txtData);
+            Autor = itemView.findViewById(R.id.textView10);
         }
 
     }

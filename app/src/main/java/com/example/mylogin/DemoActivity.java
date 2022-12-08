@@ -13,9 +13,9 @@ import com.google.firebase.firestore.Query;
 import android.os.Bundle;
 
 public class DemoActivity extends AppCompatActivity {
-    RecyclerView mRecycler;
-    bookAdapter mAdapter;
-    FirebaseFirestore mFirestore;
+    private RecyclerView mRecycler;
+    private bookAdapter mAdapter;
+    private  FirebaseFirestore mFirestore;
 
 
     @Override
@@ -28,15 +28,13 @@ public class DemoActivity extends AppCompatActivity {
         //mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setLayoutManager(new GridLayoutManager(this,2));
         Query query = mFirestore.collection("Books");
-
         FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
         mAdapter = new bookAdapter(firestoreRecyclerOptions);
         mAdapter.notifyDataSetChanged();
         mRecycler.setAdapter(mAdapter);
 
-
-
     }
+
 
     @Override
     protected void onStart() {
@@ -49,4 +47,5 @@ public class DemoActivity extends AppCompatActivity {
         super.onStop();
         mAdapter.stopListening();
     }
+
 }

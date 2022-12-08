@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mylogin.adapter.bookAdapter;
+import com.example.mylogin.model.Book;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -24,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
@@ -41,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private bookAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +56,36 @@ public class HomeActivity extends AppCompatActivity {
         recycler = (RecyclerView) findViewById(R.id.recyclerID);
         //recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         recycler.setLayoutManager(new GridLayoutManager(this,3));
-        listData = new ArrayList<String>();
-        for (int i=0; i<=50; i++){
-            listData.add("Book #" + i + " ");
-        }
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(listData);
-        recycler.setAdapter(adapter);
+
+
+        Query query = db.collection("Books");
+        FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
+        mAdapter = new bookAdapter(firestoreRecyclerOptions);
+
+        mAdapter.notifyDataSetChanged();
+        mAdapter.setOnClicListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent detailIntent = new Intent(HomeActivity.this, BookDetailsActivity.class);
+
+                detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
+                HomeActivity.this.startActivity(detailIntent);
+              //  Toast.makeText(HomeActivity.this, "Guenas guenas"+mAdapter.getItem(recycler.getChildAdapterPosition(view)).getTitulo(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        recycler.setAdapter(mAdapter);
+
+
+      //listData = new ArrayList<String>();
+      //for (int i=0; i<=2; i++){
+      //    listData.add("Book #" + i + " ");
+      //}
+      //RecyclerViewAdapter adapter = new RecyclerViewAdapter(listData);
+      //recycler.setAdapter(adapter);
+
+
         // RecyclerView References 2022-12-02
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -99,6 +128,7 @@ public class HomeActivity extends AppCompatActivity {
                             FirebaseAuth.getInstance().signOut();
                             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
                             HomeActivity.this.startActivity(intent);
+
                         } else {
                             Toast.makeText(HomeActivity.this, "No se pudo cerrar sesión", Toast.LENGTH_SHORT).show();
                         }
@@ -128,5 +158,16 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+  @Override
+  protected void onStart() {
+      super.onStart();
+      mAdapter.startListening();
+  }
+
+  @Override
+  protected void onStop() {
+      super.onStop();
+      mAdapter.stopListening();
+  }
 
 }
