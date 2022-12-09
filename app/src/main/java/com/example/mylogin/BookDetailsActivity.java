@@ -2,15 +2,23 @@ package com.example.mylogin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mylogin.adapter.bookAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 
@@ -25,6 +33,10 @@ public class BookDetailsActivity extends AppCompatActivity {
     static TextView  Calificacion;
     static TextView  VinculoLibro;
     static TextView  Sinopsis;
+    static String linkbook;
+    static ImageView imagen;
+
+    private TextView btnRegresa;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
@@ -36,6 +48,8 @@ public class BookDetailsActivity extends AppCompatActivity {
         Titulo = (TextView) findViewById(R.id.textView8);
         Autor = (TextView) findViewById(R.id.textView9);
         Editorial = (TextView) findViewById(R.id.textView11);
+        imagen = (ImageView) findViewById(R.id.imageView2);
+        btnRegresa = (TextView) findViewById(R.id.textViewBackBook);
 
       // consulta
 
@@ -54,6 +68,8 @@ public class BookDetailsActivity extends AppCompatActivity {
                                 Titulo.setText(document.get("Titulo").toString());
                                 Autor.setText(document.get("Autor").toString());
                                 Editorial.setText(document.get("Editorial").toString());
+                                linkbook = document.get("VinculoImagen").toString();
+                                Picasso.get().load(linkbook).into(imagen);
                             }
                         } else {
 
@@ -62,6 +78,16 @@ public class BookDetailsActivity extends AppCompatActivity {
                 });
 
         // consulta
+
+
+        btnRegresa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent detailIntent = new Intent(BookDetailsActivity.this, HomeActivity.class);
+                BookDetailsActivity.this.startActivity(detailIntent);
+            }
+        });
+
 
 
     }
