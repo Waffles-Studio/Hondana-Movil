@@ -102,7 +102,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
                 <TextView
-                    android:id="@+id/textView17"
+                    android:id="@+id/txtPaginas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -137,9 +137,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:text="Pages:"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtPaginas"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView17" />
+                    app:layout_constraintTop_toTopOf="@+id/txtPaginas" />
 
                 <TextView
                     android:id="@+id/textView14"
@@ -159,7 +159,7 @@
                     android:layout_marginEnd="32dp"
                     android:text="Book ISBN"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtPaginas" />
 
                 <TextView
                     android:id="@+id/textView16"

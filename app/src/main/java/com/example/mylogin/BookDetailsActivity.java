@@ -2,6 +2,7 @@ package com.example.mylogin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     private TextView btnRegresa;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,10 @@ public class BookDetailsActivity extends AppCompatActivity {
         Editorial = (TextView) findViewById(R.id.textView11);
         imagen = (ImageView) findViewById(R.id.imageView2);
         btnRegresa = (TextView) findViewById(R.id.textViewBackBook);
+        NumeroPaginas = (TextView) findViewById(R.id.txtPaginas);
+        Calificacion = (TextView) findViewById(R.id.textView19);
+        Sinopsis = (TextView) findViewById(R.id.textView22);
+        ISBN = (TextView) findViewById(R.id.textView15);
 
       // consulta
 
@@ -67,8 +73,14 @@ public class BookDetailsActivity extends AppCompatActivity {
                                 Titulo.setText(document.get("Titulo").toString());
                                 Autor.setText(document.get("Autor").toString());
                                 Editorial.setText(document.get("Editorial").toString());
+                                NumeroPaginas.setText(document.get("NumeroPaginas").toString());
+                                Calificacion.setText(document.get("Calificacion").toString());
+                                Sinopsis.setText(document.get("Sinopsis").toString());
+                                ISBN.setText(document.get("ISBN").toString());
+
                                 linkbook = document.get("VinculoImagen").toString();
                                 Picasso.get().load(linkbook).into(imagen);
+
                             }
                         } else {
 
