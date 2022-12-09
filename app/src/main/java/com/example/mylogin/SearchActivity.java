@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.mylogin.adapter.bookAdapter;
 import com.example.mylogin.model.Book;
@@ -24,13 +28,16 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private bookAdapter mAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private EditText TextSearch;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        TextSearch = (EditText) findViewById(R.id.TxtSearch);
         recycler = (RecyclerView) findViewById(R.id.recyclerSearch);
         recycler.setLayoutManager(new GridLayoutManager(this,3));
 
@@ -54,7 +61,14 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        
+        TextSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                Toast.makeText(SearchActivity.this, "Se escribio algo siaodknas", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
 
     };
 
