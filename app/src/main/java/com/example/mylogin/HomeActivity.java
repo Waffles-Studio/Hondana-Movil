@@ -70,17 +70,6 @@ public class HomeActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
         recycler.setAdapter(mAdapter);
 
-        //List<String> listaNombre = Arrays.asList(mAdapter.toString());
-
-
-//          listData = new ArrayList<String>();
-//          for (int i=1; i<=4; i++){
-//                  listData.add(mAdapter.toString());
-//          }
-//          RecyclerViewAdapter adapter = new RecyclerViewAdapter(listData);
-//          recycler.setAdapter(adapter);
-
-
         //Obtiene la instancia de Firebase y Logs de Analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle params = new Bundle();
