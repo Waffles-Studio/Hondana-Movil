@@ -35,11 +35,8 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    // RecyclerView References 2022-12-02
-    ArrayList<String> listData;
-    RecyclerView recycler;
-    // RecyclerView References 2022-12-02
 
+    private RecyclerView recycler;
     private TextView txtWelcome;
     private Button btnCerrar, btnSearch;
     private GoogleSignInClient mGoogleSignClient;
