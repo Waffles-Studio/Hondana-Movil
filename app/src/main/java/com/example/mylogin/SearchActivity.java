@@ -1,6 +1,5 @@
 package com.example.mylogin;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,12 +18,19 @@ import com.example.mylogin.model.Book;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
+
+import io.reactivex.rxjava3.annotations.NonNull;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -78,9 +84,14 @@ public class SearchActivity extends AppCompatActivity {
     };
 
 
-    private void CargarPorFiltro(String nombreLibro){
-
+    private void CargarPorFiltro(String nombreLibro) {
+        Query q1 = db.collection("Books").whereEqualTo("Titulo", nombreLibro);
+        FirestoreRecyclerOptions<Book> firestoreRecyclerOptionsfiltro = new FirestoreRecyclerOptions.Builder<Book>().setQuery(q1,Book.class).build();
+        mAdapter = new bookAdapter(firestoreRecyclerOptionsfiltro);
+        mAdapter.notifyDataSetChanged();
+        recycler.setAdapter(mAdapter);
     }
+
 
     //Codigo de Load
     @Override
