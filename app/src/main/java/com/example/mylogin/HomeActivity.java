@@ -128,6 +128,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent detailIntent = new Intent(HomeActivity.this, BookDetailsActivity.class);
 
                 detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
+
                 HomeActivity.this.startActivity(detailIntent);
             }
         });
