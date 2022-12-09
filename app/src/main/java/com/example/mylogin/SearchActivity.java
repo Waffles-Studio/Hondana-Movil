@@ -9,24 +9,18 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mylogin.adapter.bookAdapter;
 import com.example.mylogin.model.Book;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,14 +38,9 @@ import java.util.ArrayList;
 public class SearchActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private bookAdapter mAdapter;
+    private bookAdapter mAdapterfiltro;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText TextSearch;
-    private GoogleSignInClient mGoogleSignClient;
-    private FirebaseAnalytics mFirebaseAnalytics;
-
-    private Button btnHome,btnSearch, btnCS;
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -65,75 +54,33 @@ public class SearchActivity extends AppCompatActivity {
 
         CargarPorFiltro(TextSearch.getText().toString());
         //Consulta de libros
-        btnHome = (Button) findViewById(R.id.btnHome);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
-        btnCS = (Button) findViewById(R.id.btnCS);
 
-        //Obtener libro seleccionado
-        mAdapter.setOnClicListener(new View.OnClickListener() {
+      //      Query query = db.collection("Books");
+      //      FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
+      //      mAdapter = new bookAdapter(firestoreRecyclerOptions);
+      //      mAdapter.notifyDataSetChanged();
+      //      recycler.setAdapter(mAdapter);
+//
+//
+      //  //Obtener libro seleccionado
+              mAdapter.setOnClicListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view)
+                  {
+                      Intent detailIntent = new Intent(SearchActivity.this, BookDetailsActivity.class);
+
+                      detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
+                      SearchActivity.this.startActivity(detailIntent);
+                  }
+              });
+
+        TextSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View view)
-            {
-                Intent detailIntent = new Intent(SearchActivity.this, BookDetailsActivity.class);
-
-                detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
-                SearchActivity.this.startActivity(detailIntent);
-            }
-        });
-
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent detailIntent = new Intent(SearchActivity.this, HomeActivity.class);
-                SearchActivity.this.startActivity(detailIntent);
-            }
-        });
-
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent detailIntent = new Intent(SearchActivity.this, SearchActivity.class);
-                SearchActivity.this.startActivity(detailIntent);
-            }
-        });
-
-        btnCS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mGoogleSignClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            mFirebaseAnalytics = FirebaseAnalytics.getInstance(SearchActivity.this);
-                            Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "SignOut");
-                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-
-                            FirebaseAuth.getInstance().signOut();
-                            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                            SearchActivity.this.startActivity(intent);
-
-                        }
-                    }
-                });
-            }
-        });
-
-
-        TextSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                CargarPorFiltro(TextSearch.getText().toString());
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(i==KeyEvent.KEYCODE_ENTER){
+                    CargarPorFiltro(TextSearch.getText().toString());
+                              }
+                return false;
             }
         });
 
@@ -150,6 +97,7 @@ public class SearchActivity extends AppCompatActivity {
             q1 = db.collection("Books");
         }
         FirestoreRecyclerOptions<Book> firestoreRecyclerOptionsfiltro = new FirestoreRecyclerOptions.Builder<Book>().setQuery(q1,Book.class).build();
+        Toast.makeText(SearchActivity.this, "Si entro "+ TextSearch.getText().toString(), Toast.LENGTH_SHORT).show();
         mAdapter = new bookAdapter(firestoreRecyclerOptionsfiltro);
         mAdapter.startListening();
         mAdapter.notifyDataSetChanged();
@@ -157,9 +105,24 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+   //Codigo de Load
+//   @Override
+//   protected void onStart() {
+//       super.onStart();
+//       mAdapter.startListening();
+//   }
+
+//   //Codigo de close
+//   @Override
+//   protected void onStop() {
+//       super.onStop();
+//       mAdapter.stopListening();
+//   }
+
     @Override
     public void onBackPressed() {
         // do nothing.
     }
 
 }
+
