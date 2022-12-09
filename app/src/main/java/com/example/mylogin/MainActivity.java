@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                     FirebaseUser currentUser = mAuth.getCurrentUser();
                     if(currentUser != null){
                         Intent loginIntent = new Intent(MainActivity.this, HomeActivity.class);
-                        loginIntent.putExtra("Username", usr);
                         MainActivity.this.startActivity(loginIntent);
                     }
                 }
@@ -138,5 +137,6 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onStart();
     }
+
 
 }

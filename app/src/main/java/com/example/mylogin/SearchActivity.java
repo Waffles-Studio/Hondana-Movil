@@ -1,5 +1,6 @@
 package com.example.mylogin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,14 +33,17 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-
+import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private bookAdapter mAdapter;
+    private bookAdapter mAdapterfiltro;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText TextSearch;
+
+    private ArrayList<Book> mArre = new ArrayList<>();
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -85,7 +91,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
     private void CargarPorFiltro(String nombreLibro) {
-        Query q1 = db.collection("Books").whereEqualTo("Titulo", nombreLibro);
+        Query q1 = db.collection("Books").whereEqualTo("Titulo", "Demon Slayer");
         FirestoreRecyclerOptions<Book> firestoreRecyclerOptionsfiltro = new FirestoreRecyclerOptions.Builder<Book>().setQuery(q1,Book.class).build();
         mAdapter = new bookAdapter(firestoreRecyclerOptionsfiltro);
         mAdapter.notifyDataSetChanged();
@@ -106,5 +112,11 @@ public class SearchActivity extends AppCompatActivity {
         super.onStop();
         mAdapter.stopListening();
     }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing.
+    }
+
 }
 

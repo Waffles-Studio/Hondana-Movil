@@ -52,7 +52,7 @@
             android:layout_marginBottom="248dp"
             android:layout_weight="33"
             android:backgroundTint="#c7c7c7"
-            android:text="Date"
+            android:text="Favorites"
             android:textAllCaps="false"
             android:textColor="#212121"
             app:cornerRadius="24dp" />

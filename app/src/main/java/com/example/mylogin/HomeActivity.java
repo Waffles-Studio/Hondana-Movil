@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params);
 
         //Otros
-        obtenerusuario(getIntent().getStringExtra("Username"));
+        obtenerusuario();
 
         //Configurar ventana Google SignIn
         GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -136,7 +136,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     //Obtener datos del usuario
-    private void obtenerusuario(String correoUsuario){
+    private void obtenerusuario(){
+        mAuth = FirebaseAuth.getInstance();
+        String correoUsuario = mAuth.getCurrentUser().getEmail();
         DocumentReference docRef = db.collection("HondanaDB").document(correoUsuario);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -164,5 +166,11 @@ public class HomeActivity extends AppCompatActivity {
       super.onStop();
       mAdapter.stopListening();
   }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing.
+    }
+
 
 }
