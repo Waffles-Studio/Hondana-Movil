@@ -63,16 +63,16 @@ public class SearchActivity extends AppCompatActivity {
 //
 //
       //  //Obtener libro seleccionado
-      //  mAdapter.setOnClicListener(new View.OnClickListener() {
-      //      @Override
-      //      public void onClick(View view)
-      //      {
-      //          Intent detailIntent = new Intent(SearchActivity.this, BookDetailsActivity.class);
-//
-      //          detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
-      //          SearchActivity.this.startActivity(detailIntent);
-      //      }
-      //  });
+              mAdapter.setOnClicListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view)
+                  {
+                      Intent detailIntent = new Intent(SearchActivity.this, BookDetailsActivity.class);
+
+                      detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
+                      SearchActivity.this.startActivity(detailIntent);
+                  }
+              });
 
         TextSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -91,7 +91,7 @@ public class SearchActivity extends AppCompatActivity {
         Query q1 ;
         if (nombreLibro.length() != 0){
 
-            q1 = db.collection("Books").whereEqualTo("Titulo", nombreLibro);
+            q1 = db.collection("Books").whereGreaterThanOrEqualTo("Titulo", nombreLibro);
         }else
         {
             q1 = db.collection("Books");
