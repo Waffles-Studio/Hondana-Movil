@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import org.w3c.dom.Text;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -40,6 +43,7 @@ public class SearchActivity extends AppCompatActivity {
         TextSearch = (EditText) findViewById(R.id.TxtSearch);
         recycler = (RecyclerView) findViewById(R.id.recyclerSearch);
         recycler.setLayoutManager(new GridLayoutManager(this,3));
+
 
         //Consulta de libros
         Query query = db.collection("Books");
@@ -64,13 +68,19 @@ public class SearchActivity extends AppCompatActivity {
         TextSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                Toast.makeText(SearchActivity.this, "Se escribio algo siaodknas", Toast.LENGTH_SHORT).show();
-
+                if(i==KeyEvent.KEYCODE_ENTER){
+                    CargarPorFiltro(TextSearch.getText().toString());
+                }
                 return false;
             }
         });
 
     };
+
+
+    private void CargarPorFiltro(String nombreLibro){
+
+    }
 
     //Codigo de Load
     @Override
