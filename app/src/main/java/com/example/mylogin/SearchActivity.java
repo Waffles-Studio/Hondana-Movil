@@ -42,10 +42,6 @@ public class SearchActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText TextSearch;
 
-    private ArrayList<Book> mArre = new ArrayList<>();
-
-
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,33 +52,34 @@ public class SearchActivity extends AppCompatActivity {
         recycler = (RecyclerView) findViewById(R.id.recyclerSearch);
         recycler.setLayoutManager(new GridLayoutManager(this,3));
 
-
+        CargarPorFiltro(TextSearch.getText().toString());
         //Consulta de libros
-        Query query = db.collection("Books");
-        FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
-        mAdapter = new bookAdapter(firestoreRecyclerOptions);
-        mAdapter.notifyDataSetChanged();
-        recycler.setAdapter(mAdapter);
 
-
-        //Obtener libro seleccionado
-        mAdapter.setOnClicListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                Intent detailIntent = new Intent(SearchActivity.this, BookDetailsActivity.class);
-
-                detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
-                SearchActivity.this.startActivity(detailIntent);
-            }
-        });
+      //      Query query = db.collection("Books");
+      //      FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
+      //      mAdapter = new bookAdapter(firestoreRecyclerOptions);
+      //      mAdapter.notifyDataSetChanged();
+      //      recycler.setAdapter(mAdapter);
+//
+//
+      //  //Obtener libro seleccionado
+      //  mAdapter.setOnClicListener(new View.OnClickListener() {
+      //      @Override
+      //      public void onClick(View view)
+      //      {
+      //          Intent detailIntent = new Intent(SearchActivity.this, BookDetailsActivity.class);
+//
+      //          detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
+      //          SearchActivity.this.startActivity(detailIntent);
+      //      }
+      //  });
 
         TextSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if(i==KeyEvent.KEYCODE_ENTER){
                     CargarPorFiltro(TextSearch.getText().toString());
-                }
+                              }
                 return false;
             }
         });
@@ -91,27 +88,36 @@ public class SearchActivity extends AppCompatActivity {
 
 
     private void CargarPorFiltro(String nombreLibro) {
-        Query q1 = db.collection("Books").whereEqualTo("Titulo", "Demon Slayer");
+        Query q1 ;
+        if (nombreLibro.length() != 0){
+
+            q1 = db.collection("Books").whereEqualTo("Titulo", nombreLibro);
+        }else
+        {
+            q1 = db.collection("Books");
+        }
         FirestoreRecyclerOptions<Book> firestoreRecyclerOptionsfiltro = new FirestoreRecyclerOptions.Builder<Book>().setQuery(q1,Book.class).build();
+        Toast.makeText(SearchActivity.this, "Si entro "+ TextSearch.getText().toString(), Toast.LENGTH_SHORT).show();
         mAdapter = new bookAdapter(firestoreRecyclerOptionsfiltro);
+        mAdapter.startListening();
         mAdapter.notifyDataSetChanged();
         recycler.setAdapter(mAdapter);
     }
 
 
-    //Codigo de Load
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAdapter.startListening();
-    }
+   //Codigo de Load
+//   @Override
+//   protected void onStart() {
+//       super.onStart();
+//       mAdapter.startListening();
+//   }
 
-    //Codigo de close
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAdapter.stopListening();
-    }
+//   //Codigo de close
+//   @Override
+//   protected void onStop() {
+//       super.onStop();
+//       mAdapter.stopListening();
+//   }
 
     @Override
     public void onBackPressed() {
