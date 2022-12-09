@@ -30,6 +30,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     // RecyclerView References 2022-12-02
 
     private TextView txtWelcome;
-    private Button btnCerrar;
+    private Button btnCerrar, btnSearch;
     private GoogleSignInClient mGoogleSignClient;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseAuth mAuth;
@@ -52,64 +54,50 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // RecyclerView References 2022-12-02
-        recycler = (RecyclerView) findViewById(R.id.recyclerID);
         //recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
+        recycler = (RecyclerView) findViewById(R.id.recyclerID);
         recycler.setLayoutManager(new GridLayoutManager(this,3));
 
+        //Se obtienen referencias de layout
+        btnSearch = (Button) findViewById(R.id.btnSearch);
+        txtWelcome = (TextView) findViewById(R.id.txtWelcome);
+        btnCerrar = (Button) findViewById(R.id.btnCS);
 
+        //Consulta de libros
         Query query = db.collection("Books");
         FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query,Book.class).build();
         mAdapter = new bookAdapter(firestoreRecyclerOptions);
-
         mAdapter.notifyDataSetChanged();
-        mAdapter.setOnClicListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                Intent detailIntent = new Intent(HomeActivity.this, BookDetailsActivity.class);
-
-                detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
-                HomeActivity.this.startActivity(detailIntent);
-              //  Toast.makeText(HomeActivity.this, "Guenas guenas"+mAdapter.getItem(recycler.getChildAdapterPosition(view)).getTitulo(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
         recycler.setAdapter(mAdapter);
 
-
-      //listData = new ArrayList<String>();
-      //for (int i=0; i<=2; i++){
-      //    listData.add("Book #" + i + " ");
-      //}
-      //RecyclerViewAdapter adapter = new RecyclerViewAdapter(listData);
-      //recycler.setAdapter(adapter);
+        //List<String> listaNombre = Arrays.asList(mAdapter.toString());
 
 
-        // RecyclerView References 2022-12-02
+//          listData = new ArrayList<String>();
+//          for (int i=1; i<=4; i++){
+//                  listData.add(mAdapter.toString());
+//          }
+//          RecyclerViewAdapter adapter = new RecyclerViewAdapter(listData);
+//          recycler.setAdapter(adapter);
 
+
+        //Obtiene la instancia de Firebase y Logs de Analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.METHOD, "HOME");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params);
 
-
-        txtWelcome = (TextView) findViewById(R.id.txtWelcome);
-        btnCerrar = (Button) findViewById(R.id.btnCS);
-
+        //Otros
         obtenerusuario(getIntent().getStringExtra("Username"));
 
-
-        //Configurar Google SignIn
+        //Configurar ventana Google SignIn
         GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        //.requestIdToken(getString(R.string.default_web_client_id))
-
         mGoogleSignClient = GoogleSignIn.getClient(this, gso);
 
-
+        //Boton para cerrar sesion y volver a home
         btnCerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,8 +125,30 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //Boton para ir a layout de busqueda
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                HomeActivity.this.startActivity(intent);
+            }
+        });
+
+        //Obtener libro seleccionado
+        mAdapter.setOnClicListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent detailIntent = new Intent(HomeActivity.this, BookDetailsActivity.class);
+
+                detailIntent.putExtra("IDLibro",  mAdapter.getItem(recycler.getChildAdapterPosition(view)).getIDLibro());
+                HomeActivity.this.startActivity(detailIntent);
+            }
+        });
+
     }
 
+    //Obtener datos del usuario
     private void obtenerusuario(String correoUsuario){
         DocumentReference docRef = db.collection("HondanaDB").document(correoUsuario);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -148,22 +158,20 @@ public class HomeActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         txtWelcome.setText("Hello "+document.get("UserName")+"!");
-                    } else {
-                        Toast.makeText(HomeActivity.this, "No tiene nombre", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(HomeActivity.this, "Error al traer nombre", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    //Codigo de Load
   @Override
   protected void onStart() {
       super.onStart();
       mAdapter.startListening();
   }
 
+    //Codigo de close
   @Override
   protected void onStop() {
       super.onStop();

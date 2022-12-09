@@ -43,6 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolderData(@NonNull View itemView) {
             super(itemView);
             Data = itemView.findViewById(R.id.txtData);
+
         }
 
         public void asignData(String sdata) {

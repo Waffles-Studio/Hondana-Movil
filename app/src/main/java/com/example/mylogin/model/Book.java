@@ -13,11 +13,6 @@ public class Book {
     String VinculoImagen;
     String Sinopsis;
 
-
-
-
-
-
     public Book(){}
 
     public Book (String Autor,String Titulo)
